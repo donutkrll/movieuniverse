@@ -98,6 +98,12 @@
             this.label24 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
@@ -112,12 +118,6 @@
             this.label27 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.label39 = new System.Windows.Forms.Label();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
-            this.button6 = new System.Windows.Forms.Button();
-            this.label40 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -129,8 +129,8 @@
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -877,6 +877,67 @@
             this.panel5.TabIndex = 24;
             this.panel5.Visible = false;
             // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.textBox10);
+            this.panel6.Controls.Add(this.label40);
+            this.panel6.Controls.Add(this.button6);
+            this.panel6.Controls.Add(this.maskedTextBox1);
+            this.panel6.Controls.Add(this.label39);
+            this.panel6.Location = new System.Drawing.Point(735, 126);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(381, 246);
+            this.panel6.TabIndex = 14;
+            this.panel6.Visible = false;
+            // 
+            // textBox10
+            // 
+            this.textBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox10.Location = new System.Drawing.Point(8, 160);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(223, 32);
+            this.textBox10.TabIndex = 19;
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label40.Location = new System.Drawing.Point(3, 125);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(186, 26);
+            this.label40.TabIndex = 18;
+            this.label40.Text = "Кількість грошей";
+            // 
+            // button6
+            // 
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button6.Location = new System.Drawing.Point(239, 201);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(139, 36);
+            this.button6.TabIndex = 17;
+            this.button6.Text = "Поповнити";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.maskedTextBox1.Location = new System.Drawing.Point(8, 81);
+            this.maskedTextBox1.Mask = "0000-0000-0000-0000";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(223, 32);
+            this.maskedTextBox1.TabIndex = 16;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label39.Location = new System.Drawing.Point(3, 42);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(154, 26);
+            this.label39.TabIndex = 15;
+            this.label39.Text = "Номер картки";
+            // 
             // label38
             // 
             this.label38.AutoSize = true;
@@ -1018,67 +1079,6 @@
             this.pictureBox3.TabIndex = 0;
             this.pictureBox3.TabStop = false;
             // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.textBox10);
-            this.panel6.Controls.Add(this.label40);
-            this.panel6.Controls.Add(this.button6);
-            this.panel6.Controls.Add(this.maskedTextBox1);
-            this.panel6.Controls.Add(this.label39);
-            this.panel6.Location = new System.Drawing.Point(735, 126);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(381, 246);
-            this.panel6.TabIndex = 14;
-            this.panel6.Visible = false;
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label39.Location = new System.Drawing.Point(3, 42);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(154, 26);
-            this.label39.TabIndex = 15;
-            this.label39.Text = "Номер картки";
-            // 
-            // maskedTextBox1
-            // 
-            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.maskedTextBox1.Location = new System.Drawing.Point(8, 81);
-            this.maskedTextBox1.Mask = "0000-0000-0000-0000";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(223, 32);
-            this.maskedTextBox1.TabIndex = 16;
-            // 
-            // button6
-            // 
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button6.Location = new System.Drawing.Point(239, 201);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(139, 36);
-            this.button6.TabIndex = 17;
-            this.button6.Text = "Поповнити";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label40.Location = new System.Drawing.Point(3, 125);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(186, 26);
-            this.label40.TabIndex = 18;
-            this.label40.Text = "Кількість грошей";
-            // 
-            // textBox10
-            // 
-            this.textBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox10.Location = new System.Drawing.Point(8, 160);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(223, 32);
-            this.textBox10.TabIndex = 19;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1086,12 +1086,12 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(233)))), ((int)(((byte)(204)))));
             this.ClientSize = new System.Drawing.Size(1146, 450);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel2);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form2";
             this.Text = "Administrator";
@@ -1113,9 +1113,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

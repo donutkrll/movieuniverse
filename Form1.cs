@@ -17,7 +17,7 @@ namespace movieuniverse
             try
             {
                 mySqlConnection.Open();
-                MessageBox.Show("Database connection success");
+               // MessageBox.Show("Database connection success");
             }
             catch (Exception ex)
             {

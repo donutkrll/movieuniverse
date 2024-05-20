@@ -95,7 +95,7 @@ namespace movieuniverse
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка: " + ex.Message);
+                MessageBox.Show("Помилка: " + ex.Message);
             }
             foreach (DataGridViewColumn column in dataGridView1.Columns)
             {
@@ -250,17 +250,17 @@ namespace movieuniverse
                     }
 
                     LoadData();
-                    MessageBox.Show("Запись успешно удалена.");
+                    MessageBox.Show("Запис успішно видалений.");
                     label3.Text = "";
                 }
                 else
                 {
-                    MessageBox.Show("Выберите запись для удаления.");
+                    MessageBox.Show("Оберіть запис для видалення.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при удалении записи: " + ex.Message);
+                MessageBox.Show("Помилка при видаленні запису: " + ex.Message);
             }
         }
         public void DeletePastSessions()
@@ -282,7 +282,7 @@ namespace movieuniverse
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при удалении прошедших сеансов: " + ex.Message);
+                MessageBox.Show("Помилка при видаленні минувших сеансів: " + ex.Message);
             }
         }
 
@@ -363,7 +363,7 @@ namespace movieuniverse
 
             if (image == null)
             {
-                MessageBox.Show("Пожалуйста, загрузите изображение.");
+                MessageBox.Show("Будь ласка завантажте зображення.");
                 return;
             }
 
@@ -631,10 +631,11 @@ namespace movieuniverse
 
         public decimal GetTicketPriceFromDB(string title, DateTime sessionTime, string hallNumber)
         {
-            Console.WriteLine("Начало выполнения метода GetTicketPriceFromDB");
+
             decimal ticketPrice = 0;
             string mysqlCon = "server=localhost; user=root; database=filmuniverse; password=babych612";
-            string query = "SELECT ticketcost FROM AfishaFilm WHERE title = @title AND DATE_FORMAT(timefilm, '%Y-%m-%d %H:%i') = @sessionTime AND cinemahall = @hallNumber";
+            string query = "SELECT ticketcost FROM AfishaFilm WHERE title = @title AND CONCAT(DATE_FORMAT(datefilm, '%Y-%m-%d'), ' ', DATE_FORMAT(timefilm, '%H:%i')) = @sessionTime AND cinemahall = @hallNumber";
+
 
             using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
             {
@@ -651,11 +652,11 @@ namespace movieuniverse
                         if (reader.Read())
                         {
                             ticketPrice = reader.GetDecimal("ticketcost");
-                            Console.WriteLine($"Найдена цена билета: {ticketPrice}");
+                            Console.WriteLine($"Знайдена ціна білету: {ticketPrice}");
                         }
                         else
                         {
-                            Console.WriteLine("Запись не найдена.");
+                            Console.WriteLine("Запис не знайдено.");
                         }
                     }
                 }
@@ -779,7 +780,7 @@ namespace movieuniverse
 
                             decimal ticketPrice = GetTicketPriceFromDB(title, sessionTime, hallNumber);
                             decimal userWallet = GetUserWallet(userLogin);
-                            MessageBox.Show($"Баланс: {userWallet}, Цена билета: {ticketPrice}");
+                            MessageBox.Show($"Баланс: {userWallet}, Ціна билету: {ticketPrice}");
 
                             if (userWallet >= ticketPrice)
                             {
@@ -789,7 +790,6 @@ namespace movieuniverse
                                 MessageBox.Show($"Місце {btn.Text} заброньовано.");
                                 SaveBookingStatus();
                                 CreateHTMLTicket(title, sessionTime, hallNumber, ticketPrice, index + 1, userLogin);
-                                MessageBox.Show($"Поточний баланс: {userWallet}");
                             }
                             else
                             {
@@ -1323,24 +1323,19 @@ namespace movieuniverse
             }
             if (decimal.TryParse(textBox10.Text, out decimal result) && result > 0)
             {
-                // Создание строки подключения к базе данных
                 string connectionString = "server=localhost; user=root; database=filmuniverse; password=babych612";
 
-                // SQL запрос на обновление баланса
-                string query = "UPDATE user SET wallet = wallet + @balanceToAdd WHERE login = @login";
+                string query = "UPDATE user SET wallet = COALESCE(wallet, 0) + @balanceToAdd WHERE login = @login";
 
-                // Использование блока using для автоматического закрытия соединения
                 using (MySqlConnection con = new MySqlConnection(connectionString))
                 {
                     using (MySqlCommand cmd = new MySqlCommand(query, con))
                     {
-                        // Открытие соединения
                         con.Open();
 
                         // Добавление параметров в SQL запрос
                         cmd.Parameters.AddWithValue("@balanceToAdd", result);
                         cmd.Parameters.AddWithValue("@login", userLogin); // Замените на актуальный логин
-
                         // Выполнение запроса
                         int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -1360,7 +1355,7 @@ namespace movieuniverse
             }
             else
             {
-                MessageBox.Show("Введите коректне значення грошей яке ви хочете додати на баланс.");
+                MessageBox.Show("Введіть коректне значення грошей, яке Ви хочете додати на баланс.");
             }
         }
     }
