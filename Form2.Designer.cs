@@ -1086,15 +1086,15 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(233)))), ((int)(((byte)(204)))));
             this.ClientSize = new System.Drawing.Size(1146, 450);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.Controls.Add(this.panel4);
-            this.Controls.Add(this.panel3);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form2";
-            this.Text = "Administrator";
+            this.Text = "FilmUniverse";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

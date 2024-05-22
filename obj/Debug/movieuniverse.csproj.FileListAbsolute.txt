@@ -42,3 +42,7 @@ D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\System.Numerics.
 D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\obj\Debug\movieuniverse.csproj.CopyComplete
+D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\Castle.Core.dll
+D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\Moq.dll
+D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\Castle.Core.xml
+D:\KHAI\UI UX design\lab6\movieuniverse\movieuniverse\bin\Debug\Moq.xml

@@ -164,7 +164,7 @@ namespace movieuniverse
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Помилка: " + ex.Message);
+                    MessageBox.Show("Помилка: Користувач з таким логіном вже існує");
                 }
             }
         }
