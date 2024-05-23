@@ -9,7 +9,7 @@ namespace movieuniverse
 
     public class DataLoader : IMoviePanelUpdater
     {
-        private string mysqlCon = "server=localhost; user=root; database=filmuniverse; password=babych612"; // Потрібно визначити з'єднання з базою даних
+        private string mysqlCon = "server=localhost; user=root; database=filmuniverse; password=babych612";
 
         public DataTable LoadData()
         {

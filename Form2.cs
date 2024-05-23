@@ -224,6 +224,8 @@ namespace movieuniverse
         private void button3_Click(object sender, EventArgs e)
         {
             filmManager.DeleteFilm(selectedRecordId2);
+            LoadData();
+            label23.Text = "";
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
