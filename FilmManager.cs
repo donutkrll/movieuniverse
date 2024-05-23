@@ -1,9 +1,11 @@
-﻿using MySql.Data.MySqlClient;
+﻿using movieuniverse;
+using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 public class FilmManager
 {
@@ -15,47 +17,47 @@ public class FilmManager
         mysqlCon = connectionString;
     }
 
-    public void AddFilm(string title, string genre, string producer, string actors, DateTime dateFilm, DateTime timeFilm, decimal ticketCost, int cinemaHall, TimeSpan duration, bool subtitles, Image image)
+    public void AddFilm(Movie movie)
     {
-        if (string.IsNullOrWhiteSpace(title))
+        if (string.IsNullOrWhiteSpace(movie.title))
         {
             MessageBox.Show("Будь ласка, введіть назву фільму.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(genre))
+        if (string.IsNullOrWhiteSpace(movie.genre))
         {
             MessageBox.Show("Будь ласка, виберіть жанр фільму.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(producer))
+        if (string.IsNullOrWhiteSpace(movie.producer))
         {
             MessageBox.Show("Будь ласка, введіть ім'я режисера.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(actors))
+        if (string.IsNullOrWhiteSpace(movie.actors))
         {
             MessageBox.Show("Будь ласка, введіть ім'я акторів.");
             return;
         }
 
-        if (dateFilm.Date < DateTime.Today)
+        if (movie.dateFilm.Date < DateTime.Today)
         {
             MessageBox.Show("Дата сеансу не може бути меншою за поточну дату.");
             return;
         }
 
         DateTime currentTime = DateTime.Now;
-        DateTime selectedDateTime = dateFilm.Date.Add(timeFilm.TimeOfDay);
+        DateTime selectedDateTime = movie.dateFilm.Date.Add(movie.timeFilm.TimeOfDay);
         if (selectedDateTime < currentTime)
         {
             MessageBox.Show("Час проведення сеансу не може бути меншим за поточний час.");
             return;
         }
 
-        if (image == null)
+        if (movie.image == null)
         {
             MessageBox.Show("Будь ласка завантажте зображення.");
             return;
@@ -64,7 +66,7 @@ public class FilmManager
         byte[] imageData;
         using (MemoryStream ms = new MemoryStream())
         {
-            image.Save(ms, image.RawFormat);
+            movie.image.Save(ms, movie.image.RawFormat);
             imageData = ms.ToArray();
         }
 
@@ -76,16 +78,16 @@ public class FilmManager
                 string query = "INSERT INTO AfishaFilm (title, datefilm, timefilm, ticketcost, cinemahall, genre, producer, actors, subtitles, duration, image) " +
                                 "VALUES (@title, @datefilm, @timefilm, @ticketcost, @cinemahall, @genre, @producer, @actors, @subtitles, @duration, @image)";
                 MySqlCommand sqlCommand = new MySqlCommand(query, mySqlConnection);
-                sqlCommand.Parameters.AddWithValue("@title", title);
-                sqlCommand.Parameters.AddWithValue("@datefilm", dateFilm);
-                sqlCommand.Parameters.AddWithValue("@timefilm", timeFilm);
-                sqlCommand.Parameters.AddWithValue("@ticketcost", ticketCost);
-                sqlCommand.Parameters.AddWithValue("@cinemahall", cinemaHall);
-                sqlCommand.Parameters.AddWithValue("@genre", genre);
-                sqlCommand.Parameters.AddWithValue("@producer", producer);
-                sqlCommand.Parameters.AddWithValue("@actors", actors);
-                sqlCommand.Parameters.AddWithValue("@subtitles", subtitles);
-                sqlCommand.Parameters.AddWithValue("@duration", duration);
+                sqlCommand.Parameters.AddWithValue("@title", movie.title);
+                sqlCommand.Parameters.AddWithValue("@datefilm", movie.dateFilm);
+                sqlCommand.Parameters.AddWithValue("@timefilm", movie.timeFilm);
+                sqlCommand.Parameters.AddWithValue("@ticketcost", movie.ticketCost);
+                sqlCommand.Parameters.AddWithValue("@cinemahall", movie.cinemaHall);
+                sqlCommand.Parameters.AddWithValue("@genre", movie.genre);
+                sqlCommand.Parameters.AddWithValue("@producer", movie.producer);
+                sqlCommand.Parameters.AddWithValue("@actors", movie.actors);
+                sqlCommand.Parameters.AddWithValue("@subtitles", movie.subtitles);
+                sqlCommand.Parameters.AddWithValue("@duration", movie.duration);
                 sqlCommand.Parameters.AddWithValue("@image", imageData);
                 sqlCommand.ExecuteNonQuery();
                 MessageBox.Show("Дані успішно додані в базу даних.");
@@ -96,41 +98,41 @@ public class FilmManager
             MessageBox.Show("Помилка при додаванні даних в базу даних: " + ex.Message);
         }
     }
-    public void UpdateFilm(int selectedRecordId, string title, string genre, string producer, string actors, DateTime dateFilm, DateTime timeFilm, decimal ticketCost, int cinemaHall, TimeSpan duration, bool subtitles)
+    public void UpdateFilm(int selectedRecordId, Movie movie)
     {
 
-        if (string.IsNullOrWhiteSpace(title))
+        if (string.IsNullOrWhiteSpace(movie.title))
         {
             MessageBox.Show("Будь ласка, введіть назву фільму.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(genre))
+        if (string.IsNullOrWhiteSpace(movie.genre))
         {
             MessageBox.Show("Будь ласка, виберіть жанр фільму.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(producer))
+        if (string.IsNullOrWhiteSpace(movie.producer))
         {
             MessageBox.Show("Будь ласка, введіть ім'я режисера.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(actors))
+        if (string.IsNullOrWhiteSpace(movie.actors))
         {
             MessageBox.Show("Будь ласка, введіть ім'я акторів.");
             return;
         }
 
-        if (dateFilm.Date < DateTime.Today)
+        if (movie.dateFilm.Date < DateTime.Today)
         {
             MessageBox.Show("Дата сеансу не може бути меншою за поточну дату.");
             return;
         }
 
         DateTime currentTime = DateTime.Now;
-        DateTime selectedDateTime = dateFilm.Date.Add(timeFilm.TimeOfDay);
+        DateTime selectedDateTime = movie.dateFilm.Date.Add(movie.timeFilm.TimeOfDay);
         if (selectedDateTime < currentTime)
         {
             MessageBox.Show("Час проведення сеансу не може бути меншим за поточний час.");
@@ -153,16 +155,16 @@ public class FilmManager
                                 "WHERE id = @id";
                 MySqlCommand sqlCommand = new MySqlCommand(query, mySqlConnection);
                 sqlCommand.Parameters.AddWithValue("@id", selectedRecordId);
-                sqlCommand.Parameters.AddWithValue("@title", title);
-                sqlCommand.Parameters.AddWithValue("@datefilm", dateFilm);
-                sqlCommand.Parameters.AddWithValue("@timefilm", timeFilm);
-                sqlCommand.Parameters.AddWithValue("@ticketcost", ticketCost);
-                sqlCommand.Parameters.AddWithValue("@cinemahall", cinemaHall);
-                sqlCommand.Parameters.AddWithValue("@genre", genre);
-                sqlCommand.Parameters.AddWithValue("@producer", producer);
-                sqlCommand.Parameters.AddWithValue("@actors", actors);
-                sqlCommand.Parameters.AddWithValue("@subtitles", subtitles);
-                sqlCommand.Parameters.AddWithValue("@duration", duration);
+                sqlCommand.Parameters.AddWithValue("@title", movie.title);
+                sqlCommand.Parameters.AddWithValue("@datefilm", movie.dateFilm);
+                sqlCommand.Parameters.AddWithValue("@timefilm", movie.timeFilm);
+                sqlCommand.Parameters.AddWithValue("@ticketcost", movie.ticketCost);
+                sqlCommand.Parameters.AddWithValue("@cinemahall", movie.cinemaHall);
+                sqlCommand.Parameters.AddWithValue("@genre", movie.genre);
+                sqlCommand.Parameters.AddWithValue("@producer", movie.producer);
+                sqlCommand.Parameters.AddWithValue("@actors", movie.actors);
+                sqlCommand.Parameters.AddWithValue("@subtitles", movie.subtitles);
+                sqlCommand.Parameters.AddWithValue("@duration", movie.duration);
                 sqlCommand.ExecuteNonQuery();
                 MessageBox.Show("Дані успішно оновлені в базі даних.");
                 canUpdate = true;
@@ -175,4 +177,55 @@ public class FilmManager
             return;
         }
     }
+    public void DeleteFilm(int selectedRecordId)
+    {
+        try
+        {
+            if (selectedRecordId != 0)
+            {
+                string deleteQuery = $"DELETE FROM AfishaFilm WHERE id = {selectedRecordId}";
+                using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
+                {
+                    MySqlCommand sqlCommand = new MySqlCommand(deleteQuery, mySqlConnection);
+                    mySqlConnection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Запис успішно видалений.");
+            }
+            else
+            {
+                MessageBox.Show("Оберіть запис для видалення.");
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Помилка при видаленні запису: " + ex.Message);
+        }
+    }
+    public void SortMovies(string sortOrder, string sortBy, string titleFilter, string dateFilter, Control flowLayoutPanel, DataLoader dataLoader, BookingManager bookingManager, string userLogin)
+    {
+        try
+        {
+            string query = $"SELECT cinemahall, genre, producer, actors, title, datefilm, timefilm, ticketcost, image, duration " +
+                    $"FROM AfishaFilm " +
+                    $"WHERE 1=1 {titleFilter} {dateFilter} " +
+                    $"ORDER BY {sortBy} {sortOrder}";
+
+            using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
+            {
+                MySqlCommand sqlCommand = new MySqlCommand(query, mySqlConnection);
+                mySqlConnection.Open();
+                using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                {
+                    dataLoader.UpdateMoviePanels(reader, (FlowLayoutPanel)flowLayoutPanel, bookingManager, userLogin);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Помилка: " + ex.Message);
+        }
+    }
+
 }

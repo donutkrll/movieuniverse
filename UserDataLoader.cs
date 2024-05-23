@@ -75,6 +75,54 @@ namespace movieuniverse
                 }
             }
         }
+        public bool RegisterUser(UserData userData)
+        {
+            string name = userData.name;
+            string surname = userData.surname;
+            string login = userData.login;
+            string email = userData.email;
+            string phone = userData.phone;
+            DateTime birthdate = userData.birthdate;
+            string password = userData.password;
 
+            // Ваша проверка данных здесь...
+
+            // Підключення до бази даних та вставка нового запису
+            string query = "INSERT INTO user (name, surname, login, email, phone_number, birthday_date, password) VALUES (@name, @surname, @login, @email, @phone, @birthdate, @password)";
+
+            using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
+            {
+                MySqlCommand command = new MySqlCommand(query, mySqlConnection);
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@surname", surname);
+                command.Parameters.AddWithValue("@login", login);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@phone", phone);
+                command.Parameters.AddWithValue("@birthdate", birthdate);
+                command.Parameters.AddWithValue("@password", password);
+
+                try
+                {
+                    mySqlConnection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Реєстрація пройшла успішно!");
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Помилка при реєстрації.");
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Помилка: " + ex.Message);
+                    return false;
+                }
+            }
+        }
     }
 }

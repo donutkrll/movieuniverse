@@ -1,4 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BookingManager">
+    <Position X="3" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAlAAEAAAAIAAAAAAAAAAAQAAACAAIAAAAACAAAAg=</HashCode>
+      <FileName>BookingManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="movieuniverse.DataLoader">
+    <Position X="1.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAEAAACBAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>DataLoader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Bottom" Position="0.263" />
+  </Class>
+  <Class Name="movieuniverse.UserDataLoader">
+    <Position X="4.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAASAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>UserDataLoader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="movieuniverse.Form2">
+    <Position X="8.25" Y="1" Width="3.5" />
+    <Members>
+      <Method Name="dataGridView1_CellContentClick" Hidden="true" />
+      <Method Name="dataGridView1_SelectionChanged" Hidden="true" />
+      <Method Name="dataGridView2_CellContentClick" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Method Name="LoadData" Hidden="true" />
+      <Method Name="LoadUserData" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>/3gAEJAAIyBUaBCa8DCFCBBCJPh5AQCYEnqOEfFICrA=</HashCode>
+      <FileName>Form2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="movieuniverse.Movie">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAACIAQAAAAAACAIAAAFACEAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Movie.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FilmManager">
+    <Position X="6.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAIgAAAAAAAgAAAAAAAAAAARAAAABAAAA=</HashCode>
+      <FileName>FilmManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="movieuniverse.UserData">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgBAAEAAAAAAAEAAAgAAAAAgAAEAA=</HashCode>
+      <FileName>UserData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="movieuniverse.IMoviePanelUpdater">
+    <Position X="1.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IMoviePanelUpdater.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

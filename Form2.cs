@@ -32,6 +32,8 @@ namespace movieuniverse
         private DataLoader dataLoader;
         private UserDataLoader userdataLoader;
         private BookingManager bookingManager;
+        private Movie movie;
+        private UserData userData;
         private string userLogin;
         public Form2()
         {
@@ -40,6 +42,8 @@ namespace movieuniverse
             dataLoader = new DataLoader();
             userdataLoader = new UserDataLoader();
             bookingManager = new BookingManager();
+            movie = new Movie();
+            userData = new UserData();
             LoadData();
             bookingManager.LoadBookingStatus();
 
@@ -54,7 +58,7 @@ namespace movieuniverse
             ascendingRadioButton = new RadioButton();
             descendingRadioButton = new RadioButton();
             sortingpanelCreated = false;
-            query = "SELECT cinemahall, genre, title, datefilm, timefilm, ticketcost, image, duration FROM AfishaFilm ORDER BY datefilm, timefilm ASC";
+            query = "SELECT cinemahall, genre, title, datefilm, timefilm, ticketcost, image, duration, producer, actors FROM AfishaFilm ORDER BY datefilm, timefilm ASC";
 
             додаванняToolStripMenuItem.Click += додаванняToolStripMenuItem_Click;
             редагуванняToolStripMenuItem.Click += редагуванняToolStripMenuItem_Click;
@@ -219,31 +223,7 @@ namespace movieuniverse
 
         private void button3_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (selectedRecordId2 != 0)
-                {
-                    string deleteQuery = $"DELETE FROM AfishaFilm WHERE id = {selectedRecordId2}";
-                    using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
-                    {
-                        MySqlCommand sqlCommand = new MySqlCommand(deleteQuery, mySqlConnection);
-                        mySqlConnection.Open();
-                        sqlCommand.ExecuteNonQuery();
-                    }
-
-                    LoadData();
-                    MessageBox.Show("Запис успішно видалений.");
-                    label3.Text = "";
-                }
-                else
-                {
-                    MessageBox.Show("Оберіть запис для видалення.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Помилка при видаленні запису: " + ex.Message);
-            }
+            filmManager.DeleteFilm(selectedRecordId2);
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -253,34 +233,43 @@ namespace movieuniverse
 
         private void button1_Click(object sender, EventArgs e)
         {
-            bool updaterLogic = filmManager.canUpdate;
-            string title = textBox1.Text.Trim();
-            string genre = comboBox1.Text.Trim();
-            string producer = textBox3.Text.Trim();
-            string actors = textBox4.Text.Trim();
-            DateTime dateFilm = dateTimePicker1.Value;
-            DateTime timeFilm = dateTimePicker2.Value;
-            decimal ticketCost;
-            int cinemaHall;
-            TimeSpan duration = dateTimePicker3.Value.TimeOfDay;
-            bool subtitles = checkBox1.Checked;
-            Image image = pictureBox.Image;
+            // Проверяем, есть ли у нас уже объект Movie
+            if (movie == null)
+            {
+                MessageBox.Show("Ошибка: Объект Movie не инициализирован.");
+                return;
+            }
 
+            // Обновляем свойства объекта movie данными из текстовых полей и других элементов управления формы
+            movie.title = textBox1.Text.Trim();
+            movie.genre = comboBox1.Text.Trim();
+            movie.producer = textBox3.Text.Trim();
+            movie.actors = textBox4.Text.Trim();
+            movie.dateFilm = dateTimePicker1.Value;
+            movie.timeFilm = dateTimePicker2.Value;
+            decimal ticketCost;
             if (!decimal.TryParse(textBox2.Text, out ticketCost))
             {
                 MessageBox.Show("Будь ласка, введіть коректну ціну білету.");
                 return;
             }
-
+            movie.ticketCost = ticketCost;
+            int cinemaHall;
             if (!int.TryParse(comboBox2.Text.Trim(), out cinemaHall))
             {
                 MessageBox.Show("Будь ласка, введіть коректний номер залу.");
                 return;
             }
+            movie.cinemaHall = cinemaHall;
+            movie.duration = dateTimePicker3.Value.TimeOfDay;
+            movie.subtitles = checkBox1.Checked;
+            movie.image = pictureBox.Image;
 
-            filmManager.AddFilm(title, genre, producer, actors, dateFilm, timeFilm, ticketCost, cinemaHall, duration, subtitles, image);
+            // Вызываем метод AddFilm для добавления нового фильма,
+            // передавая в него объект movie
+            filmManager.AddFilm(movie);
 
-            // Очистка полей после добавления
+            // Очищаем поля после добавления
             textBox1.Clear();
             comboBox1.SelectedIndex = -1;
             textBox3.Clear();
@@ -290,37 +279,44 @@ namespace movieuniverse
             dateTimePicker3.Value = DateTime.Now.Date;
             checkBox1.Checked = false;
             pictureBox.Image = null;
+
+            // Перезагружаем данные
             LoadData();
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
-            string title = textBox8.Text.Trim();
-            string genre = comboBox4.Text.Trim();
-            string producer = textBox6.Text.Trim();
-            string actors = textBox5.Text.Trim();
-            DateTime dateFilm = dateTimePicker6.Value;
-            DateTime timeFilm = dateTimePicker5.Value;
+            // Создаем объект Movie и заполняем его данными из элементов управления на форме
+            Movie movieToUpdate = new Movie();
+            movieToUpdate.title = textBox8.Text.Trim();
+            movieToUpdate.genre = comboBox4.Text.Trim();
+            movieToUpdate.producer = textBox6.Text.Trim();
+            movieToUpdate.actors = textBox5.Text.Trim();
+            movieToUpdate.dateFilm = dateTimePicker6.Value;
+            movieToUpdate.timeFilm = dateTimePicker5.Value;
             decimal ticketCost;
-            int cinemaHall;
-            TimeSpan duration = dateTimePicker4.Value.TimeOfDay;
-            bool subtitles = checkBox2.Checked;
-
             if (!decimal.TryParse(textBox7.Text, out ticketCost))
             {
                 MessageBox.Show("Будь ласка, введіть коректну ціну білету.");
                 return;
             }
-
+            movieToUpdate.ticketCost = ticketCost;
+            int cinemaHall;
             if (!int.TryParse(comboBox3.Text.Trim(), out cinemaHall))
             {
                 MessageBox.Show("Будь ласка, введіть коректний номер залу.");
                 return;
             }
+            movieToUpdate.cinemaHall = cinemaHall;
+            movieToUpdate.duration = dateTimePicker4.Value.TimeOfDay;
+            movieToUpdate.subtitles = checkBox2.Checked;
 
-            filmManager.UpdateFilm(selectedRecordId, title, genre, producer, actors, dateFilm, timeFilm, ticketCost, cinemaHall, duration, subtitles);
+            // Вызываем метод UpdateFilm, передавая ему объект Movie
+            filmManager.UpdateFilm(selectedRecordId, movieToUpdate);
             LoadData();
         }
+
         private void FilmManager_UpdateCompleted(object sender, bool e)
         {
 
@@ -363,10 +359,7 @@ namespace movieuniverse
                 return;
             }
         }
-        private void SortOptionChanged(object sender, EventArgs e)
-        {
-            SortMovies();
-        }
+       
         private void SearchButton_Click(object sender, EventArgs e)
         {
             SortMovies();
@@ -377,223 +370,62 @@ namespace movieuniverse
                 searchTitleTextBox.Text = "";
             }
         }
-
+        private void SortOptionChanged(object sender, EventArgs e)
+        {
+            SortMovies();
+        }
         private void SortMovies()
         {
-            try
+            string sortOrder = ascendingRadioButton.Checked ? "ASC" : "DESC";
+            string sortBy = "";
+
+            if (sortComboBox.SelectedItem != null)
             {
-                string sortOrder = ascendingRadioButton.Checked ? "ASC" : "DESC";
-                string sortBy = "";
-
-                if (sortComboBox.SelectedItem != null)
+                switch (sortComboBox.SelectedItem.ToString())
                 {
-                    switch (sortComboBox.SelectedItem.ToString())
-                    {
-                        case "Назва":
-                            sortBy = "title";
-                            break;
-                        case "Тривалість":
-                            sortBy = "duration";
-                            break;
-                        case "Дата проведення/Час сеансу":
-                            sortBy = "datefilm, timefilm";
-                            break;
-                        case "Ціна":
-                            sortBy = "ticketcost";
-                            break;
-                        case "Жанр":
-                            sortBy = "genre";
-                            break;
-                        case "Номер залу":
-                            sortBy = "cinemahall";
-                            break;
-                        default:
-                            sortBy = "datefilm, timefilm";
-                            break;
-                    }
-                }
-                else
-                {
-                    sortBy = "datefilm, timefilm";
-                }
-
-                string titleFilter = "";
-                string dateFilter = "";
-                string searchTitle = ((System.Windows.Forms.TextBox)flowLayoutPanel.Controls.Find("searchTitleTextBox", true).FirstOrDefault())?.Text;
-                DateTime? searchDate = ((DateTimePicker)flowLayoutPanel.Controls.Find("searchDatePicker", true).FirstOrDefault())?.Value;
-
-                if (!string.IsNullOrEmpty(searchTitle))
-                {
-                    titleFilter = $"AND title LIKE '%{searchTitle}%'";
-                }
-
-                if (searchDate.HasValue)
-                {
-                    dateFilter = $"AND datefilm = '{searchDate.Value.ToString("yyyy-MM-dd")}'";
-                }
-
-                query = $"SELECT cinemahall, genre, producer, actors, title, datefilm, timefilm, ticketcost, image, duration " +
-                        $"FROM AfishaFilm " +
-                        $"WHERE 1=1 {titleFilter} {dateFilter} " +
-                        $"ORDER BY {sortBy} {sortOrder}";
-
-                using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
-                {
-                    MySqlCommand sqlCommand = new MySqlCommand(query, mySqlConnection);
-                    mySqlConnection.Open();
-                    using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                    {
-                        UpdateMoviePanels(reader);
-                    }
+                    case "Назва":
+                        sortBy = "title";
+                        break;
+                    case "Тривалість":
+                        sortBy = "duration";
+                        break;
+                    case "Дата проведення/Час сеансу":
+                        sortBy = "datefilm, timefilm";
+                        break;
+                    case "Ціна":
+                        sortBy = "ticketcost";
+                        break;
+                    case "Жанр":
+                        sortBy = "genre";
+                        break;
+                    case "Номер залу":
+                        sortBy = "cinemahall";
+                        break;
+                    default:
+                        sortBy = "datefilm, timefilm";
+                        break;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Помилка: " + ex.Message);
-            }
-        }
-
-        public void UpdateMoviePanels(MySqlDataReader reader)
-        {
-            // Удалить только панели фильмов из FlowLayoutPanel
-            for (int i = flowLayoutPanel.Controls.Count - 1; i >= 0; i--)
-            {
-                if (flowLayoutPanel.Controls[i].Tag != null && flowLayoutPanel.Controls[i].Tag.ToString() == "MoviePanel")
-                {
-                    flowLayoutPanel.Controls.RemoveAt(i);
-                }
+                sortBy = "datefilm, timefilm";
             }
 
-            while (reader.Read())
+            string titleFilter = "";
+            string dateFilter = "";
+            string searchTitle = ((System.Windows.Forms.TextBox)flowLayoutPanel.Controls.Find("searchTitleTextBox", true).FirstOrDefault())?.Text;
+            DateTime? searchDate = ((DateTimePicker)flowLayoutPanel.Controls.Find("searchDatePicker", true).FirstOrDefault())?.Value;
+
+            if (!string.IsNullOrEmpty(searchTitle))
             {
-                Panel moviePanel = new Panel();
-                moviePanel.Tag = "MoviePanel"; //тэг для идентификации панели
-                moviePanel.BackColor = Color.LightGray;
-                moviePanel.BorderStyle = BorderStyle.FixedSingle;
-                moviePanel.Margin = new Padding(5);
-                moviePanel.Width = flowLayoutPanel.Width - 25;
-                moviePanel.Padding = new Padding(5); //  отступы внутри панели
-                moviePanel.Height = 215; // высота панели
-                moviePanel.BackColor = Color.FromArgb(228, 210, 148);
-
-
-                // PictureBox для изображения фильма
-                PictureBox pictureBox = new PictureBox();
-                pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBox.Width = 150; // ширина для картинки
-                pictureBox.Height = 200; //высота для картинки
-                if (reader["image"] != DBNull.Value && ((byte[])reader["image"]).Length > 0)
-                {
-                    pictureBox.Image = ByteArrayToImage((byte[])reader["image"]); // Загружаем изображение из базы данных
-                }
-                else
-                {
-                    pictureBox.Image = null;
-                }
-                pictureBox.Margin = new Padding(0, 0, 10, 0); // Добавляем отступ справа
-
-                //метки
-                Label titleLabel = new Label();
-                titleLabel.Text = reader["title"].ToString();
-                titleLabel.Font = new Font("Arial", 14, FontStyle.Bold);
-                titleLabel.AutoSize = true;
-                titleLabel.Padding = new Padding(0, 0, 0, 10);
-
-                Label genreLabel = new Label();
-                genreLabel.Text = $"Жанр: {reader["genre"].ToString()}";
-                genreLabel.Font = new Font("Arial", 10);
-                genreLabel.AutoSize = true;
-                genreLabel.Padding = new Padding(0, 0, 0, 10);
-
-                Label hallLabel = new Label();
-                hallLabel.Text = $"Номер залу: {reader["cinemahall"].ToString()}";
-                hallLabel.Font = new Font("Arial", 10);
-                hallLabel.AutoSize = true;
-                hallLabel.Padding = new Padding(0, 0, 0, 10);
-
-                Label producerLabel = new Label();
-                producerLabel.Text = $"Режисер: {reader["producer"].ToString()}";
-                producerLabel.Font = new Font("Arial", 10);
-                producerLabel.AutoSize = true;
-                producerLabel.Padding = new Padding(0, 0, 0, 10);
-
-                Label actorsLabel = new Label();
-                actorsLabel.Text = $"Актори: {reader["actors"].ToString()}";
-                actorsLabel.Font = new Font("Arial", 10);
-                actorsLabel.AutoSize = true;
-                actorsLabel.Padding = new Padding(0, 0, 0, 10);
-
-                Label durationLabel = new Label();
-                durationLabel.Text = $"Тривалість: {reader.GetTimeSpan("duration").ToString(@"hh\:mm\:ss")}";
-                durationLabel.Font = new Font("Arial", 10);
-                durationLabel.AutoSize = true;
-                durationLabel.Padding = new Padding(0, 0, 0, 10);
-                durationLabel.TextAlign = ContentAlignment.BottomLeft;
-
-                Label timeLabel = new Label();
-                timeLabel.Text = $"Дата проведення сеансу: {((DateTime)reader["datefilm"]).ToShortDateString()}, Час проведення: {((TimeSpan)reader["timefilm"]).ToString(@"hh\:mm")}";
-                timeLabel.Font = new Font("Arial", 10);
-                timeLabel.AutoSize = true;
-                timeLabel.Padding = new Padding(0, 0, 0, 10);
-                timeLabel.TextAlign = ContentAlignment.BottomLeft;
-
-                Label priceLabel = new Label();
-                priceLabel.Text = $"Ціна квитка: {reader["ticketcost"].ToString()}";
-                priceLabel.Font = new Font("Arial", 10);
-                priceLabel.AutoSize = true;
-                priceLabel.Padding = new Padding(0, 0, 0, 5);
-                priceLabel.TextAlign = ContentAlignment.BottomRight; priceLabel.Cursor = Cursors.Hand;
-                string title = reader["title"].ToString();
-                string ticketCost = reader["ticketcost"].ToString();
-
-                string movieTitle = reader["title"].ToString();
-                string sessionTime = $"{((DateTime)reader["datefilm"]).ToShortDateString()} {((TimeSpan)reader["timefilm"]).ToString(@"hh\:mm")}";
-                string hallNumber = reader["cinemahall"].ToString();
-
-                priceLabel.Click += (sender, e) =>
-                {
-                    bookingManager.ShowBookingDialog(movieTitle, sessionTime, hallNumber, userLogin);
-
-                };
-
-                // Создаем TableLayoutPanel для размещения элементов
-                TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
-                tableLayoutPanel.ColumnCount = 2;
-                tableLayoutPanel.RowCount = 9;
-                tableLayoutPanel.Dock = DockStyle.Fill;
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F)); // ширина столбца для картинки
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // шрина столбца для текста
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-                tableLayoutPanel.Controls.Add(pictureBox, 0, 0);
-                tableLayoutPanel.SetRowSpan(pictureBox, 9); // Объединяем строки для картинки
-
-                tableLayoutPanel.Controls.Add(titleLabel, 1, 0);
-                tableLayoutPanel.Controls.Add(genreLabel, 1, 1);
-                tableLayoutPanel.Controls.Add(hallLabel, 1, 2);
-                tableLayoutPanel.Controls.Add(producerLabel, 1, 3);
-                tableLayoutPanel.Controls.Add(actorsLabel, 1, 4);
-                tableLayoutPanel.Controls.Add(durationLabel, 1, 5);
-                tableLayoutPanel.Controls.Add(timeLabel, 1, 6);
-                tableLayoutPanel.Controls.Add(priceLabel, 1, 7);
-
-                durationLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-                timeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-                priceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-
-                moviePanel.Controls.Add(tableLayoutPanel);
-
-                flowLayoutPanel.Controls.Add(moviePanel);
-
+                titleFilter = $"AND title LIKE '%{searchTitle}%'";
             }
+
+            if (searchDate.HasValue)
+            {
+                dateFilter = $"AND datefilm = '{searchDate.Value.ToString("yyyy-MM-dd")}'";
+            }
+            filmManager.SortMovies(sortOrder, sortBy, titleFilter, dateFilter, flowLayoutPanel, dataLoader, bookingManager, userLogin);
         }
         private void переглядСеансівToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -670,7 +502,7 @@ namespace movieuniverse
                 mySqlConnection.Open();
                 using (MySqlDataReader reader = sqlCommand.ExecuteReader())
                 {
-                    UpdateMoviePanels(reader);
+                    dataLoader.UpdateMoviePanels(reader, flowLayoutPanel, bookingManager, userLogin);
                 }
 
                 sortComboBox.SelectedIndexChanged += SortOptionChanged;
@@ -679,7 +511,7 @@ namespace movieuniverse
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Помилка: " + ex.Message);
+                MessageBox.Show("ПомилкаASASD: " + ex.Message);
             }
 
             flowLayoutPanel.Visible = true;

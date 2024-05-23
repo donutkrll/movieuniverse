@@ -8,10 +8,12 @@ namespace movieuniverse
     public partial class Form1 : Form
     {
         private Form2 form2;
+        private UserData userData;
         public Form1()
         {
             InitializeComponent();
             form2 = new Form2();
+            userData = new UserData();
             string mysqlCon = "server=localhost; user=root; database=filmuniverse; password=babych612";
             MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon);
             try
@@ -78,53 +80,53 @@ namespace movieuniverse
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string name = textBox3.Text.Trim();
-            string surname = textBox4.Text.Trim();
-            string login = textBox5.Text.Trim();
-            string email = textBox6.Text.Trim();
-            string phone = maskedTextBox1.Text.Trim();
-            DateTime birthdate = dateTimePicker1.Value;
-            string password = textBox8.Text;
+            userData.name = textBox3.Text.Trim();
+            userData.surname = textBox4.Text.Trim();
+            userData.login = textBox5.Text.Trim();
+            userData.email = textBox6.Text.Trim();
+            userData.phone = maskedTextBox1.Text.Trim();
+            userData.birthdate = dateTimePicker1.Value;
+            userData.password = textBox8.Text;
             string confirmPassword = textBox9.Text;
 
             // Перевірка правильності введених даних
-            if (string.IsNullOrWhiteSpace(name) || !Regex.IsMatch(name, @"^[\p{L}\s-']{2,}$"))
+            if (string.IsNullOrWhiteSpace(userData.name) || !Regex.IsMatch(userData.name, @"^[\p{L}\s-']{2,}$"))
             {
                 MessageBox.Show("Введіть правильне ім'я (не менше 2 символів, без цифр та символів, крім пробілу, дефісу та апострофа).");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(surname) || !Regex.IsMatch(surname, @"^[\p{L}\s-']{2,}$"))
+            if (string.IsNullOrWhiteSpace(userData.surname) || !Regex.IsMatch(userData.surname, @"^[\p{L}\s-']{2,}$"))
             {
                 MessageBox.Show("Введіть правильне прізвище (не менше 2 символів, без цифр та символів, крім пробілу, дефісу та апострофа).");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(login) || !Regex.IsMatch(login, @"^[a-zA-Z0-9]{3,}$"))
+            if (string.IsNullOrWhiteSpace(userData.login) || !Regex.IsMatch(userData.login, @"^[a-zA-Z0-9]{3,}$"))
             {
                 MessageBox.Show("Введіть правильний логін (не менше 3 символів, тільки латинські літери та цифри).");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+            if (string.IsNullOrWhiteSpace(userData.email) || !Regex.IsMatch(userData.email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
             {
                 MessageBox.Show("Введіть правильну електронну пошту.");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(phone) || !Regex.IsMatch(phone, @"^\+38\(0\d{2}\)-\d{3}-\d{4}$"))
+            if (string.IsNullOrWhiteSpace(userData.phone) || !Regex.IsMatch(userData.phone, @"^\+38\(0\d{2}\)-\d{3}-\d{4}$"))
             {
                 MessageBox.Show("Введіть правильний номер телефону у форматі +38(0XX)-XXX-XXXX.");
                 return;
             }
 
-            if (DateTime.Today.AddYears(-14) < birthdate)
+            if (DateTime.Today.AddYears(-14) < userData.birthdate)
             {
                 MessageBox.Show("Ви повинні бути старше 14 років.");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(password) || password != confirmPassword)
+            if (string.IsNullOrWhiteSpace(userData.password) || userData.password != confirmPassword)
             {
                 MessageBox.Show("Паролі не співпадають або не введені.");
                 return;
@@ -137,13 +139,13 @@ namespace movieuniverse
             using (MySqlConnection mySqlConnection = new MySqlConnection(mysqlCon))
             {
                 MySqlCommand command = new MySqlCommand(query, mySqlConnection);
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@surname", surname);
-                command.Parameters.AddWithValue("@login", login);
-                command.Parameters.AddWithValue("@email", email);
-                command.Parameters.AddWithValue("@phone", phone);
-                command.Parameters.AddWithValue("@birthdate", birthdate);
-                command.Parameters.AddWithValue("@password", password);
+                command.Parameters.AddWithValue("@name", userData.name);
+                command.Parameters.AddWithValue("@surname", userData.surname);
+                command.Parameters.AddWithValue("@login", userData.login);
+                command.Parameters.AddWithValue("@email", userData.email);
+                command.Parameters.AddWithValue("@phone", userData.phone);
+                command.Parameters.AddWithValue("@birthdate", userData.birthdate);
+                command.Parameters.AddWithValue("@password", userData.password);
 
                 try
                 {
